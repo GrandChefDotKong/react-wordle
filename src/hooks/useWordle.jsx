@@ -5,7 +5,7 @@ const useWordle = (solution) => {
 
     const [turn, setTurn] = useState(0);
     const [currentGuess, setCurrentGuess] = useState('');
-    const [guesses, setGuesses] = useState([]);
+    const [guesses, setGuesses] = useState([...Array(6)]);
     const [history, setHistory] = useState([]);
     const [isCorrect, setIsCorrect] = useState(false);
 
@@ -34,7 +34,22 @@ const useWordle = (solution) => {
 
   }
 
-  const addNewGuess = () => {
+  const addNewGuess = (formatedGuess) => {
+    if(currentGuess === solution) {
+      setIsCorrect(true);
+    }
+
+    setGuesses((prevGuesses) => {
+      let newGuesses = [...prevGuesses];
+      newGuesses[turn] = formatedGuess;
+      return newGuesses;
+    })
+    setHistory((prevHistory) => {
+      return [...prevHistory, currentGuess];
+    })
+
+    setTurn((prev) => prev + 1);
+    setCurrentGuess('');
 
   }
 
@@ -44,7 +59,7 @@ const useWordle = (solution) => {
       if(turn > 5 || history.includes(currentGuess) || currentGuess.length !== 5) return
 
       const formated = formatGuess();
-      console.log(formated);
+      addNewGuess(formated);
     }
 
     if(key === 'Backspace') {

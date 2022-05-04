@@ -7,7 +7,7 @@ const Grid = ({ currentGuess, guesses, turn }) => {
     
     for(let i = 0; i < currentGuess.length; i++) {
         formatedGuess[i] = { key: currentGuess[i], color: 'white' };
-    }
+    } 
 
   return (
     <div>

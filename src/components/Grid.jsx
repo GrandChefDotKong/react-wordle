@@ -12,7 +12,7 @@ const Grid = ({ currentGuess, guesses, turn }) => {
   return (
     <div>
         {guesses.map((g, i) => {
-            return <Row key={i} guess={i === turn ? formatedGuess: g} />
+            return <Row key={i} turn={i === turn ? true: false} guess={i === turn ? formatedGuess: g} />
         })}
     </div>
   )

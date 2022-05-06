@@ -1,12 +1,12 @@
 import React from 'react';
 
-function Row({ guess }) {
+function Row({ guess, turn }) {
   
     if(guess) {
         return (
-            <div className="row past">
+            <div className={turn ? "row current" : "row past"}>
                 {guess.map((l, i) => (
-                    <div className={l.color } key={i}>{ l.key }</div>
+                    <div className={l.key !== '' && turn ? "filled" : l.color } key={i}>{ l.key }</div>
                 ))}
             </div>
         )

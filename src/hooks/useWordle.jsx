@@ -8,58 +8,80 @@ const useWordle = (solution) => {
     const [guesses, setGuesses] = useState([...Array(6)]);
     const [history, setHistory] = useState([]);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [usedKeys, setUsedKeys] = useState({});
 
   const formatGuess = () => {
-    console.log("formatting the guess ...");
     let solutionArray = [...solution];
-    let formatedGuess = [...currentGuess].map((letter) => {
+    let formattedGuess = [...currentGuess].map((letter) => {
       return {key: letter, color: 'grey'}
     });
 
-    formatedGuess.forEach((l, i) => {
+    formattedGuess.forEach((l, i) => {
       if(solutionArray[i] === l.key) {
-        formatedGuess[i].color = 'green';
+        formattedGuess[i].color = 'green';
         solutionArray[i] = null;
       }
     });
 
-    formatedGuess.forEach((l, i) => {
+    formattedGuess.forEach((l, i) => {
       if(solutionArray.includes(l.key) && l.color !== 'green') {
-        formatedGuess[i].color = 'yellow';
+        formattedGuess[i].color = 'yellow';
         solutionArray[solutionArray.indexOf(l.key)] = null;
       }
     });
 
-    return formatedGuess;
+    return formattedGuess;
 
   }
 
-  const addNewGuess = (formatedGuess) => {
+  const addNewGuess = (formattedGuess) => {
     if(currentGuess === solution) {
       setIsCorrect(true);
     }
 
     setGuesses((prevGuesses) => {
       let newGuesses = [...prevGuesses];
-      newGuesses[turn] = formatedGuess;
+      newGuesses[turn] = formattedGuess;
       return newGuesses;
     })
     setHistory((prevHistory) => {
       return [...prevHistory, currentGuess];
-    })
+    });
 
     setTurn((prev) => prev + 1);
-    setCurrentGuess('');
 
+    setUsedKeys((prev) => {
+      let newKeys = {...prev};
+      
+      formattedGuess.forEach((l) => {
+        const currentColor = newKeys[l.key];
+
+        if(l.color === 'green') {
+          newKeys[l.key] = 'green';
+          return;
+        }
+        if(l.color === 'yellow' && currentColor !== 'green') {
+          newKeys[l.key] = 'yellow';
+          return;
+        }
+        if(l.color === 'grey' && currentColor !== ('green' || 'yellow')) {
+          newKeys[l.key] = 'grey';
+          return;
+        }
+      })
+      return newKeys;
+    })
+
+    setCurrentGuess('');
   }
 
   const handleKeyup = ({ key }) => {
 
     if(key === 'Enter') {
-      if(turn > 5 || history.includes(currentGuess) || currentGuess.length !== 5) return
+      if(turn > 5 || history.includes(currentGuess) || currentGuess.length !== 5) return;
 
-      const formated = formatGuess();
-      addNewGuess(formated);
+      const formatted = formatGuess();
+      addNewGuess(formatted);
     }
 
     if(key === 'Backspace') {
@@ -74,7 +96,7 @@ const useWordle = (solution) => {
     }
   }
 
-  return { turn, currentGuess, guesses, isCorrect, handleKeyup }
+  return { turn, currentGuess, guesses, isCorrect, handleKeyup, usedKeys }
 }
 
 export default useWordle;

@@ -7,7 +7,7 @@ function App() {
   const [solution, setSolution] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/solutions')
+    fetch('https://wordle-clone-9v0i.onrender.com/solutions')
       .then(res => res.json())
       .then(json => {
         const randomIndex = Math.floor(Math.random()*json.length);

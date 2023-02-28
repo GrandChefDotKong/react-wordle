@@ -5,7 +5,7 @@ const Keypad = ({ usedKeys }) => {
     const [letters, setLetters] = useState([]);
 
     useEffect(() => {
-    fetch('http://localhost:5000/letters')
+    fetch('https://wordle-clone-9v0i.onrender.com/letters')
         .then(res => res.json())
         .then((json) => {
             setLetters(json)
